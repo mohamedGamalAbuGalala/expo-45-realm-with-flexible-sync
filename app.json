@@ -2,10 +2,11 @@
   "expo": {
     "name": "expo-45-realm-react",
     "slug": "expo-45-realm-react",
+    "entryPoint": "index.js",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "expo-45-realm-react",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -19,9 +20,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.deleonventures.expo45realmreact"
     },
     "android": {
+      "package": "com.deleonventures.expo45realmreact",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
