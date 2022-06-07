@@ -1,31 +1,34 @@
-import { StyleSheet } from 'react-native';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {useApp, useUser} from '@realm/react';
+import {Pressable, StyleSheet} from 'react-native';
 
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
+import {Task} from '../models/Task';
+import {TaskRealmContext} from '../models';
+import {TaskManager} from '../components/TaskManager';
+import {buttonStyles} from '../styles/button';
+import {shadows} from '../styles/shadows';
+import colors from '../styles/colors';
+
+const {useRealm, useQuery} = TaskRealmContext;
+
+
 export default function TasksScreen() {
+  const realm = useRealm();
+  const user = useUser();
+  const app = useApp();
+  const result = useQuery(Task);
+
+  const tasks = useMemo(() => result.sorted('createdAt'), [result]);
+
+  useEffect(() => {
+    realm.subscriptions.update(mutableSubs => {
+      mutableSubs.add(realm.objects(Task));
+    });
+  }, [realm, result]);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tasks Tab</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
-    </View>
+    <TaskManager tasks={tasks} userId={user?.id} />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-  },
-});
